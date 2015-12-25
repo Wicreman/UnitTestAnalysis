@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="jumbotron">
-    <h1>Top 20 Unit Test Result</h1>
+    <h2>All Unanalyzed Unit Tests</h2>
 </div>
 <div class="row">
     <div class="col-md-12">
@@ -31,10 +31,39 @@
                         <td>{{ record['Result'] }}</td>
                         <td>{{ record['TFSBugID'] }}</td>
                         <td>
-                            <a tabindex="0" class="btn btn-lg" role="button" data-placement="left" data-toggle="popover" data-trigger="focus" title="{{ record['TestName'] }}" data-content="{{ record['ErrorMessage'] }}">View detailed Error</a>
+                            <a tabindex="0" class="btn" role="button" data-placement="left" data-toggle="popover" data-trigger="focus" title="{{ record['TestName'] }}" data-content="{{ record['ErrorMessage'] }}">View detailed Error</a>
                         </td>
                         <td>
-                            <a href="#">Analyze With Bugs </a>
+                            <!-- Trigger the modal with a button -->
+                            <a  class="btn btn-primary" role="button" data-toggle="modal" data-target="#{{ loop.index }}">Analyze With Bugs</a>
+                            
+                            <!-- Modal -->
+                            <div class="modal fade" id="{{ loop.index }}" role="dialog">
+                                <div class="modal-dialog modal-sm">
+
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Analyze Failed Cases With TFS Bug</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form class="form-inline" method="POST" action="{{ url_for('analyze') }}">
+                                                <div class="form-group">
+                                                    <label class="sr-only" for="exampleInputAmount">TFS Bug ID</label>
+                                                    <div class="input-group">
+                                                        <input type="hidden" name="build" value="{{ build }}"/>
+                                                        <input type="hidden" name="classname" value="{{ record['ClassName'] }}" />
+                                                        <input type="hidden" name="testname" value="{{ record['TestName'] }}" />
+                                                        <input type="text" class="form-control" id="bugid" name="bugid" placeholder="please enter TFS bug ID">
+                                                    </div>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Analyze</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                                     
                             <a href="#">Mark as Passed </a>
 
                         </td>
