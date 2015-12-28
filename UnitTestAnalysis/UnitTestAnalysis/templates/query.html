@@ -1,30 +1,31 @@
 {% extends "layout.html" %}
 
 {% block content %}
-
+<h3>Display all results for a given unit test</h3>
 <div class="panel panel-default">
     <div class="panel-heading">
         <form class="form-inline" action="{{ url_for('query') }}">
             <div class="form-group">
-                <label class="sr-only" for="classnameid">Class Name</label>
-                <input type="text" class="form-control"  id="classnameid" name="classname" placeholder="Classs Name" value="{{ className }}">
+                <label class="sr-only" for="classnameid">Class Name:</label>
+                <input type="text" class="form-control" style="width:450px" id="classnameid" name="classname" placeholder="Classs Name" value="{{ className }}">
             </div>
             <div class="form-group">
-                <label class="sr-only" for="testnameid">Test Name</label>
-                <input type="text" class="form-control"  id="testnameid" name="testname" placeholder="Test Name" value="{{ testName }}">
-            </div>  
-            <div class="form-group">
-                    <label class="radio-inline ">
-                        <input type="radio" name="branch" id="all" value="6%" checked> All
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="branch" id="dax62" value="6.2%"> AX2012 R2
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="branch" id="dax63" value="6.3%"> AX2012 R3
-                    </label>   
+                <label class="sr-only" for="testnameid">Test Name:</label>
+                <input type="text" class="form-control" style="width:450px" id="testnameid" name="testname" placeholder="Test Name" value="{{ testName }}">
             </div>
-            <button type="submit" class="btn btn-info">Search</button>
+            <div class="form-group">
+                <label class="radio-inline ">
+                    <input type="radio" name="branch" id="all" value="6%" checked> All
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="branch" id="dax62" value="6.2%"> AX2012 R2
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="branch" id="dax63" value="6.3%"> AX2012 R3
+                </label>
+            </div>
+            &nbsp;
+            <button type="submit" class="btn btn-primary">Search</button>
         </form>
     </div>
     <div class="panel-body">
@@ -42,27 +43,44 @@
                         <th>Error Message</th>
                     </tr>
                 </thead>
-                <tbody>                      
-                        {% for record in records %}
-                        <tr>
-                            <td>{{ loop.index }}</td>
-                            <td><a href="{{ url_for('detail', build=record['Build'])}}">{{ record['Build'] }} </a></td>
-                            <td>{{ record['Date'] }}</td>
-                            <td>{{ record['Branch'] }}</td>
-                            {% if record['Result'] == 'Passed' %}
-                                <td class="success">{{ record['Result'] }}</td>
+                <tbody>
+                    {% for record in records %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td><a href="{{ url_for('detail', build=record['Build'])}}">{{ record['Build'] }} </a></td>
+                        <td>{{ record['Date'] }}</td>
+                        <td>{{ record['Branch'] }}</td>
+                        {% if record['Result'] == 'Passed' %}
+                        <td class="success">{{ record['Result'] }}</td>
+                        {% else %}
+                        <td class="danger">{{ record['Result'] }}</td>
+                        {% endif %}
+
+                        <td>
+                            {% if record['ErrorMessage'] %}
+                            <a tabindex="0" class="btn btn-primary" role="button" data-placement="left" data-toggle="popover" data-trigger="focus" title="{{ record['TestName'] }}" data-content="{{ record['ErrorMessage'] }}">View detailed Error</a>
                             {% else %}
-                                <td class="danger">{{ record['Result'] }}</td>
+                            None
                             {% endif %}
-                            
-                            <td>{{ record['ErrorMessage'] }}</td>
-                        </tr>
-                        {% endfor %}
-                    {% endif %}
+                        </td>
+
+                    </tr>
+                    {% else %}
+                    No records found.
+                    {% endfor %}
+
                 </tbody>
             </table>
+            {% endif %}
         </div>
     </div>
 </div>
 
+{% endblock %}
+{% block scripts %}
+<script>
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
+</script>
 {% endblock %}
