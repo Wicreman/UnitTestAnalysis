@@ -20,6 +20,7 @@
     <RootNamespace>UnitTestAnalysis</RootNamespace>
     <InterpreterId>{060f2cea-5a47-4e58-ad35-e47d1c2782fb}</InterpreterId>
     <InterpreterVersion>3.4</InterpreterVersion>
+    <NameOfLastUsedPublishProfile>UTA</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -74,6 +75,7 @@
     <Content Include="UnitTestAnalysis\templates\detail.html" />
     <Content Include="UnitTestAnalysis\templates\index.html" />
     <Content Include="UnitTestAnalysis\templates\layout.html" />
+    <None Include="UTA.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="env\">
