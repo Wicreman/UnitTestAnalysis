@@ -68,7 +68,7 @@ def analyze():
     return redirect(url_for('detail', build=build))
 
 
-@app.route('/contact')
+@app.route('/todolist')
 def contact():
     """Renders the contact page."""
     return render_template(
@@ -96,7 +96,7 @@ def query():
     if class_name and test_name:
         values = (class_name, test_name, branch )
         db_helper = DBHelper(values)
-        result = db_helper.find_result_per_test_method()
+        result = db_helper.find_result_per_test_method()[0:60]
         
     return render_template(
         'query.html',

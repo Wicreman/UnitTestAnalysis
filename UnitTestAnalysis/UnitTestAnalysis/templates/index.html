@@ -23,7 +23,7 @@
                         {% for record in records %}
                         <tr>
                             <td>{{ loop.index }}</td>
-                            <td><a href="{{ url_for('detail', build=record['Build'])}}">{{ record['Build'] }} </a></td>
+                            <td><a target="_blank" href="{{ url_for('detail', build=record['Build'])}}">{{ record['Build'] }} </a></td>
                             <td>{{ record['Date'] }}</td>
                             <td>{{ record['Branch'] }}</td>
                             <td>{{ record['NonCIT_failed'] }}</td>

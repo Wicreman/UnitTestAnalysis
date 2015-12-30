@@ -26,13 +26,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="/" class="navbar-brand">Unit Test Analysis</a>
+                <a href="/" class="navbar-brand">Unit Test Analysis Dashboard</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="{{ url_for('home') }}">Home</a></li>
                     <li><a href="{{ url_for('query') }}">Query History</a></li>
-                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                    <li><a href="{{ url_for('contact') }}">ToDo List</a></li>
                 </ul>
             </div>
         </div>
@@ -42,6 +42,17 @@
         {% block content %}{% endblock %}
         <hr />
         <footer>
+            <h4>Welcome to Unit Test Analysis Tool</h4>
+
+            <address>
+                Shanghai Wicresoft<br />
+                China<br />
+                <abbr title="Phone">P:</abbr>
+                +86 18701960628
+            </address>
+            <address>
+                <strong>Support:</strong>   <a href="mailto:Support@example.com">v-doc@microsoft.com</a><br />
+            </address>
             <p>&copy; 2016 - Unit Test Analysis Reports</p>
         </footer>
     </div>
