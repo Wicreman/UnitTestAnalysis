@@ -128,3 +128,17 @@ def mark(build, classname, testname):
     db_helper.mark_as_passed()
     
     return redirect(url_for('detail', build=build))
+
+@app.route('/clearbug/<build>/<classname>/<testname>')
+def clearbug(build, classname, testname):
+    '''
+    Will update the UnitTestRunTestCase table with the status for the specified failed Test method.
+    Parameter 1 Required varchar(50) - Build Number.
+    Parameter 2 Required varchar(max) - Unit Test Class Name.
+    Parameter 3 Required varchar(max) - Unit Test Method Name.
+    exec dbo.AnalyzeTestMethodToTFSBug '6.3.3000.231','VersioningPurchaseOrderTest','testConfirm', NULL
+    '''
+    db_helper = DBHelper((build, classname, testname,None))
+    db_helper.analyze_test_method_to_tfsbug()
+    
+    return redirect(url_for('detail', build=build))

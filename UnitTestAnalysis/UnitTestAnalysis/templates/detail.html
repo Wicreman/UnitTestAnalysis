@@ -128,6 +128,7 @@
                                         <li><a data-toggle="modal" href="#view{{ loop.index }}analyzed">View detailed Error</a></li>
                                         <li role="separator" class="divider"></li>
                                         <li><a data-toggle="modal" href="#{{ loop.index }}analyzed">Analyze With Bugs</a></li>
+                                        <li><a href="{{ url_for('clearbug', build=build, classname=record['ClassName'], testname=record['TestName'])}}">Clear Bugs</a></li>
                                         <li role="separator" class="divider"></li>
                                         <li><a target="_blank" href="{{ url_for('query',classname=record['ClassName'], testname=record['TestName']) }} ">Search history</a></li>
                                     </ul>
