@@ -27,6 +27,8 @@ class DBHelper(object):
                 return cursor.fetchall()
         except ConnectionAbortedError as con:
             app.logger(con.strerror)
+        finally:
+            cursor.close()
 
         return None
 
@@ -120,3 +122,33 @@ class DBHelper(object):
 
         return records
     
+    def mark_as_passed(self):
+        '''
+        Will update the UnitTestRunTestCase table with the status for the specified failed Test method.
+        Parameter 1 Required varchar(50) - Build Number.
+        Parameter 2 Required varchar(max) - Unit Test Class Name.
+        Parameter 3 Required varchar(max) - Unit Test Method Name.
+        exec 
+        UPDATE dbo.UnitTestRunTestCase
+        SET Success = 1
+        from 
+          UnitTestRun A 
+          Join UnitTestRunTestCase B ON (A.RecordID = B.UnitTestRunID)
+        where
+          B.ClassName = 'KanbanJobSchedulerPlanTest'
+	    and   B.TestName = 'testCanPostponeKanbanJobMove'
+	    and A.Build = '6.3.3000.721'
+        '''
+
+        #call stored procedure
+        self.execute_stored_procedure("""
+                                    UPDATE dbo.UnitTestRunTestCase
+                                    SET Success = 1
+                                    from 
+                                      UnitTestRun A 
+                                      Join UnitTestRunTestCase B ON (A.RecordID = B.UnitTestRunID)
+                                    where
+                                    A.Build = ?
+                                    and B.ClassName = ?
+	                                and   B.TestName = ?
+	                                 """, True)
