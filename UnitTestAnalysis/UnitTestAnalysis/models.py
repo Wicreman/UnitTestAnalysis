@@ -152,3 +152,60 @@ class DBHelper(object):
                                     and B.ClassName = ?
 	                                and   B.TestName = ?
 	                                 """, True)
+
+    def find_new_failures(self):
+        '''
+        -- 
+        -- This query will contrast two result sets and return only the Failing unit tests from the New Build that have different results from the baseline build.
+        -- Parameter 1 Required varchar(50) - New Build Number.
+        -- Parameter 2 Required varchar(50) - Baseline Build Number for comparison.
+        --
+        exec dbo.FindNewFailuresBetweenBuilds '6.3.1000.2359','6.3.1000.2509' 
+        '''
+        # init query string
+        sp_str = 'dbo.FindNewFailuresBetweenBuilds  ?, ?'
+        #call stored procedure
+        rows = self.execute_stored_procedure(sp_str)
+
+        result = [{'ClassName':row[0],
+                               'TestName':row[1],
+                               'Type':row[2],
+                               'Result':row[5],
+                               'BaselineResult':row[6],
+                               'TFSBugID':row[7],
+                               'ErrorMessage':row[8]
+                               } for row in rows]
+
+        unanalyzed_result = [{'ClassName':row[0],
+                               'TestName':row[1],
+                               'Type':row[2],
+                               'Result':row[5],
+                               'BaselineResult':row[6],
+                               'TFSBugID':row[7],
+                               'ErrorMessage':row[8]
+                               } for row in rows if row[7] is None]
+
+        analyzed_result = [{'ClassName':row[0],
+                               'TestName':row[1],
+                               'Type':row[2],
+                               'Result':row[5],
+                               'BaselineResult':row[6],
+                               'TFSBugID':row[7],
+                               'ErrorMessage':row[8]
+                               } for row in rows if row[7] is not None]
+
+        return (unanalyzed_result, analyzed_result)
+
+    def analyze_with_baseline_bug(self):
+        '''
+        -- 
+        -- This query will Copy the TFSBugID from the Baseline Record to the New Failure record if the failures are identical.
+        -- Parameter 1 Required varchar(50) - New Build Number.
+        -- Parameter 2 Required varchar(50) - Baseline Build Number for comparison.
+        --
+        exec dbo.CopyTFSBugIdFromBaselineToNewFailureWhenIdentical '6.2.3000.684','6.2.3000.751'
+        '''
+        # init query string
+        sp_str = 'dbo.CopyTFSBugIdFromBaselineToNewFailureWhenIdentical ?,?'
+        #call stored procedure
+        self.execute_stored_procedure(sp_str,True)

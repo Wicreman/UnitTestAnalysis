@@ -24,7 +24,7 @@ def home():
     )
 
 
-@app.route('/detail/<build>')
+@app.route('/allfailures/<build>')
 def detail(build):
     '''
     Display the Detailed Failure results for a given Build.
@@ -142,3 +142,48 @@ def clearbug(build, classname, testname):
     db_helper.analyze_test_method_to_tfsbug()
     
     return redirect(url_for('detail', build=build))
+
+@app.route('/newfailure', methods=['GET', 'POST'])
+def get_new_failure():
+    '''
+    -- This query will contrast two result sets and return only the Failing unit tests from the New Build that have different results from the baseline build.
+    -- Parameter 1 Required varchar(50) - New Build Number.
+    -- Parameter 2 Required varchar(50) - Baseline Build Number for comparison.
+    -- exec dbo.FindNewFailuresBetweenBuilds '6.3.1000.2359','6.3.1000.2509' 
+    '''
+    if request.method == 'POST':
+        build = request.form['currentbuild']
+        baselinebuild = request.form['baselinebuild']
+        if baselinebuild is not None:
+            # init stored procedure parmater
+            db_helper = DBHelper((build, baselinebuild))
+            (unanalyzed_result, analyzed_result) = db_helper.find_new_failures()
+
+            return render_template(
+                'newfailures.html',
+                title='View All New Failures',
+                unanalyzed_records  = unanalyzed_result,
+                analyzed_records  = analyzed_result,
+                build=build,
+                baselinebuild = baselinebuild
+            )
+        else:
+           return redirect(url_for('detail', build=build)) 
+
+@app.route('/analyzebybaseline', methods=['GET', 'POST'])
+def analyze_by_baseline():
+    '''
+    -- This query will contrast two result sets and return only the Failing unit tests from the New Build that have different results from the baseline build.
+    -- Parameter 1 Required varchar(50) - New Build Number.
+    -- Parameter 2 Required varchar(50) - Baseline Build Number for comparison.
+    -- exec dbo.FindNewFailuresBetweenBuilds '6.3.1000.2359','6.3.1000.2509' 
+    '''
+    if request.method == 'POST':
+        build = request.form['currentbuild']
+        baselinebuild = request.form['baselinebuild']
+        if baselinebuild is not None:
+            # init stored procedure parmater
+            db_helper = DBHelper((build, baselinebuild))
+            db_helper.analyze_with_baseline_bug()
+      
+    return redirect(url_for('detail', build=build)) 
