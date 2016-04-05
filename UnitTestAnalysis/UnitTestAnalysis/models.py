@@ -111,7 +111,36 @@ class DBHelper(object):
         exec FindResultsPerTestMethod 'DMFDefinitionGroupServiceTest','testcreate ','6.3%'
         '''
         # init query string
+        records = []
+        TFSbug_id = None
+        class_name = self.values[0]
+        test_name = self.values[1]
         sp_str = 'exec dbo.FindResultsPerTestMethod ?, ?, ?'
+        rows = self.execute_stored_procedure(sp_str)
+        for row in rows:
+            if row[5] == 'Failed':
+                self.values = (row[1], class_name, test_name)
+                for bug_id in self.execute_stored_procedure("""
+                                          select C.TFSBugID
+                                          from 
+                                          UnitTestRun A 
+                                          Join UnitTestRunTestCase B ON (A.RecordID = B.UnitTestRunID)
+									      Join UnitTestRunTestCaseFailure C ON(B.RecordID = C.UnitTestRunTestCaseID)
+                                          where
+                                          A.Build = ?
+                                          and B.ClassName = ?
+	                                      and   B.TestName = ?
+	                                     """):
+                    if bug_id is not None:
+                        TFSbug_id = bug_id.TFSBugID
+
+            records.append({'Date':row[0],
+                               'Build':row[1],
+                               'Branch':row[2],
+                               'Result':row[5],
+                               'ErrorMessage':row[8],
+                               'TFSBugID': TFSbug_id})
+        '''
         #call stored procedure
         records = [{'Date':row[0],
                                'Build':row[1],
@@ -119,7 +148,7 @@ class DBHelper(object):
                                'Result':row[5],
                                'ErrorMessage':row[8]
                                } for row in self.execute_stored_procedure(sp_str)]
-
+        '''
         return records
     
     def mark_as_passed(self):
