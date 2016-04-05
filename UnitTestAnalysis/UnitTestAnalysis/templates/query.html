@@ -43,7 +43,7 @@
                         <th>Date</th>
                         <th>Branch</th>
                         <th>Result</th>
-                        <th>TFS ID</th>
+                        <th>TFS Bug ID</th>
                         <th>Error Message</th>
                     </tr>
                 </thead>
@@ -51,7 +51,7 @@
                     {% for record in records %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td><a href="{{ url_for('detail', build=record['Build'])}}" >{{ record['Build'] }} </a></td>
+                        <td><a target="_blank" href="{{ url_for('detail', build=record['Build'])}}" >{{ record['Build'] }} </a></td>
                         <td>{{ record['Date'] }}</td>
                         <td>{{ record['Branch'] }}</td>
                         {% if record['Result'] == 'Passed' %}
@@ -70,7 +70,7 @@
                         <td>
 
                             {% if record['ErrorMessage'] %}
-                            <a tabindex="0" class="btn btn-primary" role="button" data-placement="left" data-toggle="popover" data-trigger="focus" title="{{ record['TestName'] }}" data-content="{{ record['ErrorMessage'] }}">View detailed Error</a>
+                            <a tabindex="0" class="btn btn-default" role="button" data-placement="left" data-toggle="popover" data-trigger="focus" title="{{ record['TestName'] }}" data-content="{{ record['ErrorMessage'] }}">View detailed Error</a>
                             {% else %}
                             &nbsp;
                             {% endif %}
