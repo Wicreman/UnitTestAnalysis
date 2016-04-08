@@ -19,7 +19,7 @@ def home():
 
     return render_template(
         'index.html',
-        title='Home Page',
+        title='Unit Test Analysis Dashboard',
         records  = result,
     )
 

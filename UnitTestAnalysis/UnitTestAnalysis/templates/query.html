@@ -40,7 +40,7 @@
                     <tr>
                         <th>#</th>
                         <th>Build</th>
-                        <th>Date</th>
+                        <th>Datetime</th>
                         <th>Branch</th>
                         <th>Result</th>
                         <th>TFS Bug ID</th>
@@ -55,9 +55,9 @@
                         <td>{{ record['Date'] }}</td>
                         <td>{{ record['Branch'] }}</td>
                         {% if record['Result'] == 'Passed' %}
-                        <td class="success">{{ record['Result'] }}</td>
+                        <td class="success" align="center"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></td>
                         {% else %}
-                        <td class="danger">{{ record['Result'] }}</td>
+                        <td class="danger" align="center"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></td>
                         {% endif %}
                         <td>
                             {% if record['TFSBugID'] %}
@@ -70,7 +70,10 @@
                         <td>
 
                             {% if record['ErrorMessage'] %}
-                            <a tabindex="0" class="btn btn-default" role="button" data-placement="left" data-toggle="popover" data-trigger="focus" title="{{ record['TestName'] }}" data-content="{{ record['ErrorMessage'] }}">View detailed Error</a>
+                            <a tabindex="0" class="btn btn-default" role="button" data-placement="left" data-toggle="popover" data-trigger="focus"  title="{{ record['TestName'] }}" data-html="true" >View detailed Error</a>
+                            <div id="popover-content" class="hide">
+                                <p>{{ record['ErrorMessage'] }}</p>
+                            </div>
                             {% else %}
                             &nbsp;
                             {% endif %}
@@ -92,7 +95,12 @@
 {% block scripts %}
 <script>
     $(function () {
-        $('[data-toggle="popover"]').popover()
+        $('[data-toggle="popover"]').popover({
+            html: true,
+            content: function () {
+                return $('#popover-content').html();
+            }
+        })
     })
 </script>
 {% endblock %}

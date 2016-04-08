@@ -18,7 +18,6 @@
                             <th>Test Name</th>
                             <th>Type</th>
                             <th>Result</th>
-                            <th>TFS Bug ID</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -29,8 +28,7 @@
                             <td>{{ record['ClassName'] }}</td>
                             <td>{{ record['TestName'] }}</td>
                             <td>{{ record['Type'] }}</td>
-                            <td>{{ record['Result'] }}</td>
-                            <td>&nbsp;</td>
+                            <td><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span></td>
                             <td>
                                 <!-- Trigger the modal with a button -->
                                 <div class="btn-group">
@@ -115,7 +113,7 @@
                             <td>{{ record['ClassName'] }}</td>
                             <td>{{ record['TestName'] }}</td>
                             <td>{{ record['Type'] }}</td>
-                            <td>{{ record['Result'] }}</td>
+                            <td><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span></td>
                             <td><a target="_blank" href="http://vstfmbs:8080/tfs/MBS/DAXSE/_workitems/edit/{{ record['TFSBugID'] }}">{{ record['TFSBugID'] }}</a></td>
                             <td>
                                 <!-- Trigger the modal with a button -->
