@@ -14,8 +14,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Class Name</th>
-                            <th>Test Name</th>
+                            <th>ClassName.TestName</th>
                             <th>Type</th>
                             <th>Result</th>
                             <th>Actions</th>
@@ -25,8 +24,7 @@
                         {% for record in unanalyzed_records %}
                         <tr>
                             <td>{{ loop.index }}</td>
-                            <td>{{ record['ClassName'] }}</td>
-                            <td>{{ record['TestName'] }}</td>
+                            <td>{{ record['ClassName'] }}.<strong>{{ record['TestName'] }}</strong></td>
                             <td>{{ record['Type'] }}</td>
                             <td><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span></td>
                             <td>
@@ -98,8 +96,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Class Name</th>
-                            <th>Test Name</th>
+                            <th>ClassName.TestName</th>
                             <th>Type</th>
                             <th>Result</th>
                             <th>TFS Bug ID</th>
@@ -110,8 +107,7 @@
                         {% for record in analyzed_records %}
                         <tr>
                             <td>{{ loop.index }}</td>
-                            <td>{{ record['ClassName'] }}</td>
-                            <td>{{ record['TestName'] }}</td>
+                            <td>{{ record['ClassName'] }}.<strong>{{ record['TestName'] }}</strong></td>
                             <td>{{ record['Type'] }}</td>
                             <td><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span></td>
                             <td><a target="_blank" href="http://vstfmbs:8080/tfs/MBS/DAXSE/_workitems/edit/{{ record['TFSBugID'] }}">{{ record['TFSBugID'] }}</a></td>

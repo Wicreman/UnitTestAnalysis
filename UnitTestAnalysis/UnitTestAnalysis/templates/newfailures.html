@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<h4><strong>Disply All New faiures between {{build}} and {{baselinebuild}}</strong></h4>
+<h4><strong>Display All New faiures between {{build}} and {{baselinebuild}}</strong></h4>
 <div class="row">
     <div class="col-md-12">
         <ul class="nav nav-tabs">
@@ -30,8 +30,16 @@
                             <td>{{ record['ClassName'] }}</td>
                             <td>{{ record['TestName'] }}</td>
                             <td>{{ record['Type'] }}</td>
-                            <td>{{ record['Result'] }}</td>
-                            <td>{{ record['BaselineResult'] }}</td>
+                            {% if record['Result'] == 'Passed' %}
+                            <td align="center"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span></td>
+                            {% else %}
+                            <td align="center"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span></td>
+                            {% endif %}
+                            {% if record['BaselineResult'] == 'Passed' %}
+                            <td align="center"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span></td>
+                            {% else %}
+                            <td align="center"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span></td>
+                            {% endif %}                    
                             <td><a href="http://vstfmbs:8080/tfs/MBS/DAXSE/_workitems/edit/{{ record['TFSBugID'] }}">{{ record['TFSBugID'] }}</a></td>
                             <td>
                                 <!-- Trigger the modal with a button -->
