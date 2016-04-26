@@ -59,12 +59,14 @@ def analyze():
         class_name = request.form['classname']
         test_name = request.form['testname']
         bug_id = request.form['bugid']
+        queryflag = request.form['queryflag']
         if bug_id is not None:
-            # init stored procedure parmater
+            # init stored procedure parmater  
             values = (build, class_name, test_name, bug_id)
             db_helper = DBHelper(values)
             db_helper.analyze_test_method_to_tfsbug()
-            
+        if queryflag:
+               return redirect(url_for('query', classname=class_name, testname=test_name))
     return redirect(url_for('detail', build=build))
 
 

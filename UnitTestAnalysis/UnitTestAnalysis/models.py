@@ -83,7 +83,7 @@ class DBHelper(object):
                                'ErrorMessage':row[7]
                                } for row in rows if row[6] is not None]
 
-        return (unanalyzed_result, analyzed_result)
+        return (unanalyzed_result[:200], analyzed_result[:200])
 
 
     def analyze_test_method_to_tfsbug(self):
@@ -223,7 +223,7 @@ class DBHelper(object):
                                'ErrorMessage':row[8]
                                } for row in rows if row[7] is not None]
 
-        return (unanalyzed_result, analyzed_result)
+        return (unanalyzed_result[:200], analyzed_result[:200])
 
     def analyze_with_baseline_bug(self):
         '''

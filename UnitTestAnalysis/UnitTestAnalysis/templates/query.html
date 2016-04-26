@@ -70,20 +70,69 @@
                         <td>
 
                             {% if record['ErrorMessage'] %}
-                            <a tabindex="0" class="btn btn-default" role="button" data-placement="left" data-toggle="popover" data-trigger="focus"  title="{{ record['TestName'] }}" data-html="true" >View detailed Error</a>
-                            <div id="popover-content" class="hide">
-                                <p>{{ record['ErrorMessage'] }}</p>
-                            </div>
-                            {% else %}
-                            &nbsp;
-                            {% endif %}
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Actions
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a data-toggle="modal" href="#view{{ loop.index }}">View detailed Error</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a data-toggle="modal" href="#{{ loop.index }}">Analyze With Bugs</a></li>
+                                    </ul>
+                                </div>
+                                <!--Modal for view action-->
+                                <div class="modal fade" id="view{{ loop.index }}" role="dialog">
+                                    <div class="modal-dialog modal-md">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title"><b>Class Name:</b>&nbsp;&nbsp;{{ className }}</h4>
+                                                <h4 class="modal-title"><b>Test Name:</b>&nbsp;&nbsp;{{ testName }}</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h3>{{ record['ErrorMessage'] }}</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Modal For Anlysis action -->
+                                <div class="modal fade" id="{{ loop.index }}" role="dialog">
+                                    <div class="modal-dialog modal-md">
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">Analyze Failed Cases With TFS Bug</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form class="form-inline" method="POST" action="{{ url_for('analyze') }}">
+                                                    <div class="form-group">
+                                                        <label class="sr-only" for="exampleInputAmount">TFS Bug ID</label>
+                                                        <div class="input-group input-group-lg">
+                                                            <input type="hidden" name="build" value="{{ record['Build'] }}" />
+                                                            <input type="hidden" name="classname" value="{{ className }}" />
+                                                            <input type="hidden" name="testname" value="{{ testName }}" />
+                                                            <input type="hidden" name="queryflag" value="True" />
+                                                            <input type="text" class="form-control" id="bugid" name="bugid" placeholder="please enter TFS bug ID">
+                                                        </div>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary btn-lg">Analyze</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+                                &nbsp;
+                                {% endif %}
                         </td>
 
                     </tr>
                     {% else %}
                     No records found.
                     {% endfor %}
-
+                   
                 </tbody>
             </table>
             {% endif %}
