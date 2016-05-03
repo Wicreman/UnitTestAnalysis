@@ -4,8 +4,9 @@ Routes and views for the flask application.
 
 from datetime import datetime
 from flask import render_template, request, redirect, url_for
-from UnitTestAnalysis import app, cnxn
-from UnitTestAnalysis.models import DBHelper
+from UnitTestAnalysis import app, cnxn, db
+from UnitTestAnalysis.models import DBHelper, UnitTestCase
+from UnitTestAnalysis.utility import Utility
 
 @app.route('/')
 @app.route('/home')
@@ -13,6 +14,8 @@ def home():
     """Display the high level results for last N UT Runs"""
    
     # init stored procedure parmater
+   # db.create_all()
+
     values = (20, '6%')
     db_helper = DBHelper(values)
     result = db_helper.find_top_n_build()
@@ -189,3 +192,24 @@ def analyze_by_baseline():
             db_helper.analyze_with_baseline_bug()
       
     return redirect(url_for('detail', build=build)) 
+
+@app.route('/option')
+def option():
+
+    #Enter '6.2%' for R2 or nothing for all
+    branch = request.args.get('branch', None)
+
+    log = ''
+
+    # Call utility to load the data
+    if branch:
+        # file name of XML
+        filename = branch +".xml"
+        utility = Utility(filename, branch)
+        log = utility.parseXML()
+        
+    return render_template(
+        'options.html',
+        title='Setting for Unit Test Analysis',
+        log = log
+    )

@@ -1,4 +1,4 @@
-from UnitTestAnalysis import app, cnxn
+from UnitTestAnalysis import app, cnxn, db
 
 class DBHelper(object):
     """Helper method for database actions"""
@@ -54,7 +54,26 @@ class DBHelper(object):
 
         return records
            
-    
+    def get_area(self, classname, testname):
+        """ get the featur and owner of test cases"""
+        # Get the build to find the branch
+        build = self.values
+        if "6.3" in build:
+            branch = "DAX63SE"
+        else:
+            branch = "DAX62CD"
+
+        feature =''
+        company = ''
+
+        testcase = UnitTestCase.query.filter_by(classname=classname, testname=testname,branch=branch).first()
+        if testcase:
+            feature = testcase.feature
+            company = testcase.company
+
+        return (feature, company)
+
+
     def find_failures_per_build(self):
         '''
         -- Display the Detailed Failure results for a given Build.
@@ -66,13 +85,14 @@ class DBHelper(object):
         sp_str = 'dbo.FindFailuresPerBuild  ?'
         #call stored procedure
         rows = self.execute_stored_procedure(sp_str)
-
+        
         unanalyzed_result = [{'ClassName':row[1],
                                'TestName':row[2],
                                'Type':row[3],
                                'Result':row[5],
                                'TFSBugID':row[6],
-                               'ErrorMessage':row[7]
+                               'ErrorMessage':row[7],
+                               'Area':self.get_area(row[1],row[2])
                                } for row in rows if row[6] is None]
 
         analyzed_result = [{'ClassName':row[1],
@@ -238,3 +258,24 @@ class DBHelper(object):
         sp_str = 'dbo.CopyTFSBugIdFromBaselineToNewFailureWhenIdentical ?,?'
         #call stored procedure
         self.execute_stored_procedure(sp_str,True)
+
+
+class UnitTestCase(db.Model):
+    """Unit Test Case Model """
+    id = db.Column(db.Integer, primary_key=True)
+    classname = db.Column(db.String(120))
+    testname = db.Column(db.String(120))
+    branch = db.Column(db.String(80))  # DAX62HF, DAX63HF
+    feature = db.Column(db.String(80))
+    company = db.Column(db.String(120)) # Wicresoft, Sonata
+
+    def __init__(self, classname, testname,branch,feature,company):
+        self.classname = classname
+        self.testname = testname
+        self.branch = branch
+        self.feature = feature
+        self.company = company
+
+    def __repr__(self):
+        return '<UnitTestCase %r>' % self.company
+

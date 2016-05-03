@@ -16,6 +16,8 @@
                             <th>#</th>
                             <th>ClassName</th>
                             <th>TestName</th>
+                            <th>Feature</th>
+                            <th>Owner</th>
                             <th>Type</th>
                             <th>Result</th>
                             <th>Actions</th>
@@ -27,6 +29,8 @@
                             <td>{{ loop.index }}</td>
                             <td>{{ record['ClassName'] }}</td>
                             <td>{{ record['TestName'] }}</td>
+                            <td>{{ record['Area'][0] }}</td>
+                            <td>{{ record['Area'][1] }}</td>
                             <td>{{ record['Type'] }}</td>
                             <td><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span></td>
                             <td>
