@@ -54,14 +54,9 @@ class DBHelper(object):
 
         return records
            
-    def get_area(self, classname, testname):
+    def get_area(self, classname, testname,branch):
         """ get the featur and owner of test cases"""
         # Get the build to find the branch
-        build = self.values
-        if "6.3" in build:
-            branch = "DAX63SE"
-        else:
-            branch = "DAX62CD"
 
         feature =''
         company = ''
@@ -81,6 +76,11 @@ class DBHelper(object):
 
         exec dbo.FindFailuresPerBuild '6.3.3000.721'
         '''
+        build = self.values
+        if "6.3" in build:
+            branch = "DAX63SE"
+        else:
+            branch = "DAX62CD"
         # init query string
         sp_str = 'dbo.FindFailuresPerBuild  ?'
         #call stored procedure
@@ -92,7 +92,7 @@ class DBHelper(object):
                                'Result':row[5],
                                'TFSBugID':row[6],
                                'ErrorMessage':row[7],
-                               'Area':self.get_area(row[1],row[2])
+                               'Area':self.get_area(row[1],row[2],branch)
                                } for row in rows if row[6] is None]
 
         analyzed_result = [{'ClassName':row[1],
