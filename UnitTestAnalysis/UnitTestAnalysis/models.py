@@ -76,6 +76,10 @@ class DBHelper(object):
 
         exec dbo.FindFailuresPerBuild '6.3.3000.721'
         '''
+        unanalyzed_result = []
+        analyzed_result = []
+        notrun_result = []
+
         build = self.values
         if "6.3" in build:
             branch = "DAX63SE"
@@ -85,7 +89,37 @@ class DBHelper(object):
         sp_str = 'dbo.FindFailuresPerBuild  ?'
         #call stored procedure
         rows = self.execute_stored_procedure(sp_str)
-        
+
+        for row in rows:
+            if row[5] == 'Failed':
+                if row[6] is None:
+                    unanalyzed_result.append({'ClassName':row[1],
+                               'TestName':row[2],
+                               'Type':row[3],
+                               'Result':row[5],
+                               'TFSBugID':row[6],
+                               'ErrorMessage':row[7],
+                               'Area':self.get_area(row[1],row[2],branch)
+                               })
+                else:
+                    analyzed_result.append({'ClassName':row[1],
+                               'TestName':row[2],
+                               'Type':row[3],
+                               'Result':row[5],
+                               'TFSBugID':row[6],
+                               'ErrorMessage':row[7]
+                               })
+            else:
+                notrun_result.append({'ClassName':row[1],
+                               'TestName':row[2],
+                               'Type':row[3],
+                               'Result':row[5],
+                               'TFSBugID':row[6],
+                               'ErrorMessage':row[7]
+                               })
+
+
+        '''
         unanalyzed_result = [{'ClassName':row[1],
                                'TestName':row[2],
                                'Type':row[3],
@@ -101,9 +135,9 @@ class DBHelper(object):
                                'Result':row[5],
                                'TFSBugID':row[6],
                                'ErrorMessage':row[7]
-                               } for row in rows if row[6] is not None]
+                               } for row in rows if row[6] is not None]'''
 
-        return (unanalyzed_result[:200], analyzed_result[:200])
+        return (unanalyzed_result, analyzed_result, notrun_result)
 
 
     def analyze_test_method_to_tfsbug(self):

@@ -7,7 +7,6 @@
         <ul class="nav nav-tabs">
             <li class="active"><a aria-expanded="true" href="#unanalyzed" data-toggle="tab">Unanalyzed UTC &nbsp;&nbsp;<span class="badge">{{ unanalyzed_records|length }}</span></a></li>
             <li><a aria-expanded="false" href="#analyzed" data-toggle="tab">Analyzed UTC &nbsp;&nbsp;<span class="badge">{{ analyzed_records|length }}</span></a></li>
-            <li><a aria-expanded="false" href="#notrun" data-toggle="tab">All NotRun UTC &nbsp;&nbsp;<span class="badge">{{ notrun_records|length }}</span></a></li>
         </ul>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade active in" id="unanalyzed">
@@ -113,92 +112,6 @@
                     </thead>
                     <tbody>
                         {% for record in analyzed_records %}
-                        <tr>
-                            <td>{{ loop.index }}</td>
-                            <td>{{ record['ClassName'] }}</td>
-                            <td>{{ record['TestName'] }}</td>
-                            <td>{{ record['Type'] }}</td>
-                            <td><span class="glyphicon glyphicon-remove-sign" style="color:red" aria-hidden="true"></span></td>
-                            <td><a target="_blank" href="http://vstfmbs:8080/tfs/MBS/DAXSE/_workitems/edit/{{ record['TFSBugID'] }}">{{ record['TFSBugID'] }}</a></td>
-                            <td>
-                                <!-- Trigger the modal with a button -->
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Actions
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a data-toggle="modal" href="#view{{ loop.index }}analyzed">View detailed Error</a></li>
-                                        <li role="separator" class="divider"></li>
-                                        <li><a data-toggle="modal" href="#{{ loop.index }}analyzed">Analyze With Bugs</a></li>
-                                        <li><a href="{{ url_for('clearbug', build=build, classname=record['ClassName'], testname=record['TestName'])}}">Clear Bugs</a></li>
-                                        <li role="separator" class="divider"></li>
-                                        <li><a target="_blank" href="{{ url_for('query',classname=record['ClassName'], testname=record['TestName']) }} ">Search history</a></li>
-                                    </ul>
-                                </div>
-                                <!--Modal for view action-->
-                                <div class="modal fade" id="view{{ loop.index }}analyzed" role="dialog">
-                                    <div class="modal-dialog modal-md">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                <h4 class="modal-title"><b>Class Name:</b>&nbsp;&nbsp;{{ record['ClassName'] }}</h4>
-                                                <h4 class="modal-title"><b>Test Name:</b>&nbsp;&nbsp;{{ record['TestName'] }}</h4>
-                                            </div>
-                                            <div class="modal-body">
-                                                <h3>{{ record['ErrorMessage'] }}</h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Modal For Anlysis action -->
-                                <div class="modal fade" id="{{ loop.index }}analyzed" role="dialog">
-                                    <div class="modal-dialog modal-md">
-                                        <!-- Modal content-->
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                <h4 class="modal-title">Analyze Failed Cases With TFS Bug</h4>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form class="form-inline" method="POST" action="{{ url_for('analyze') }}">
-                                                    <div class="form-group">
-                                                        <label class="sr-only" for="exampleInputAmount">TFS Bug ID</label>
-                                                        <div class="input-group input-group-lg">
-                                                            <input type="hidden" name="build" value="{{ build }}" />
-                                                            <input type="hidden" name="classname" value="{{ record['ClassName'] }}" />
-                                                            <input type="hidden" name="testname" value="{{ record['TestName'] }}" />
-                                                            <input type="text" class="form-control" id="bugid" name="bugid" placeholder="please enter TFS bug ID">
-                                                        </div>
-                                                    </div>
-                                                    <button type="submit" class="btn btn-primary btn-lg">Analyze</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--<a href="#">Mark as Passed </a> -->
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="tab-pane fade" id="notrun">
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>ClassName</th>
-                            <th>TestName</th>
-                            <th>Type</th>
-                            <th>Result</th>
-                            <th>TFS Bug ID</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for record in notrun_records %}
                         <tr>
                             <td>{{ loop.index }}</td>
                             <td>{{ record['ClassName'] }}</td>

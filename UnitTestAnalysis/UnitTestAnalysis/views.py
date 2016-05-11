@@ -36,13 +36,14 @@ def detail(build):
     '''
     db_helper = DBHelper(build)
     # call stored procedure 
-    (unanalyzed_result, analyzed_result) = db_helper.find_failures_per_build()
+    (unanalyzed_result, analyzed_result, notrun_result) = db_helper.find_failures_per_build()
 
     return render_template(
         'detail.html',
         title='Find Failures Per Build',
         unanalyzed_records  = unanalyzed_result,
         analyzed_records  = analyzed_result,
+        notrun_records = notrun_result,
         build=build,
     )
 
