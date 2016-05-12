@@ -23,7 +23,7 @@
                 {% for record in records %}
                 <tr>
                     <td>{{ loop.index }}</td>
-                    <td><a href="{{ url_for('detail', build=record['Build'])}}">{{ record['Build'] }} </a></td>
+                    <td><a href="{{ url_for('wicresoft', build=record['Build'])}}">{{ record['Build'] }} </a></td>
                     <td>{{ record['Date'] }}</td>
                     <td>{{ record['Branch'] }}</td>
                     <td>{{ record['NonCIT_failed'] }}</td>
@@ -38,11 +38,14 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
+                                <li><a target="_blank" href="{{ url_for('wicresoft', build=record['Build'])}} ">View the plate of Wicresoft</a></li>
+                                <li role="separator" class="divider"></li> 
                                 <li><a data-toggle="modal" href="#{{ loop.index }}">View New Failures</a></li>
          
                                 <li><a target="_blank" href="{{ url_for('detail', build=record['Build'])}} ">View All Failures</a></li>
                                 <li role="separator" class="divider"></li> 
                                 <li><a data-toggle="modal" href="#analyze{{ loop.index }}">Analzye with baseline bug</a></li>
+
                             </ul>
                         </div>
                         <!-- Modal For New failures action -->

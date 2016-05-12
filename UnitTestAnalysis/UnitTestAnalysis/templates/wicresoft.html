@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<h4><strong>UT Analysis Report for build {{build}}</strong></h4>
+<h4><strong>The all failures of Wicresoft in build {{build}}</strong></h4>
 <div class="row">
     <div class="col-md-12">
         <ul class="nav nav-tabs">
@@ -81,6 +81,7 @@
                                                             <input type="hidden" name="build" value="{{ build }}" />
                                                             <input type="hidden" name="classname" value="{{ record['ClassName'] }}" />
                                                             <input type="hidden" name="testname" value="{{ record['TestName'] }}" />
+                                                            <input type="hidden" name="wicresoftflag" value="wicresoft" />
                                                             <input type="text" class="form-control" id="bugid" name="bugid" placeholder="please enter TFS bug ID">
                                                         </div>
                                                     </div>
@@ -104,6 +105,8 @@
                             <th>#</th>
                             <th>ClassName</th>
                             <th>TestName</th>
+                            <th>Feature</th>
+                            <th>Owner</th>
                             <th>Type</th>
                             <th>Result</th>
                             <th>TFS Bug ID</th>
@@ -116,6 +119,8 @@
                             <td>{{ loop.index }}</td>
                             <td>{{ record['ClassName'] }}</td>
                             <td>{{ record['TestName'] }}</td>
+                            <td>{{ record['Area'][0] }}</td>
+                            <td>{{ record['Area'][1] }}</td>
                             <td>{{ record['Type'] }}</td>
                             <td><span class="glyphicon glyphicon-remove-sign" style="color:red" aria-hidden="true"></span></td>
                             <td><a target="_blank" href="http://vstfmbs:8080/tfs/MBS/DAXSE/_workitems/edit/{{ record['TFSBugID'] }}">{{ record['TFSBugID'] }}</a></td>

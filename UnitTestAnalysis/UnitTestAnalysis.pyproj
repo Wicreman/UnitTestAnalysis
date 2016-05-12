@@ -73,7 +73,7 @@
     <Content Include="UnitTestAnalysis\static\scripts\respond.js" />
     <Content Include="UnitTestAnalysis\static\scripts\respond.min.js" />
     <Content Include="UnitTestAnalysis\static\scripts\_references.js" />
-    <Content Include="UnitTestAnalysis\templates\notrun.html" />
+    <Content Include="UnitTestAnalysis\templates\wicresoft.html" />
     <Content Include="UnitTestAnalysis\templates\options.html" />
     <Content Include="UnitTestAnalysis\templates\newfailures.html" />
     <Content Include="UnitTestAnalysis\templates\query.html" />

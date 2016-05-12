@@ -47,6 +47,25 @@ def detail(build):
         build=build,
     )
 
+@app.route('/wicresoft/<build>')
+def wicresoft(build):
+    '''
+    Display the Detailed Failure results for a given Build.
+    exec dbo.FindFailuresPerBuild '6.3.3000.231'
+    Parameter 1 Required varchar(50)- Build Number for a unit test run. 
+    '''
+    db_helper = DBHelper(build)
+    # call stored procedure 
+    (unanalyzed_result, analyzed_result) = db_helper.find_wicresoft_plate()
+
+    return render_template(
+        'wicresoft.html',
+        title='Find all Failures Per Build owned by Wicresoft company',
+        unanalyzed_records  = unanalyzed_result,
+        analyzed_records  = analyzed_result,
+        build=build,
+    )
+
 
 @app.route('/analyze', methods=['GET', 'POST'])
 def analyze():
@@ -64,13 +83,19 @@ def analyze():
         test_name = request.form['testname']
         bug_id = request.form['bugid']
         queryflag = request.form['queryflag']
+        wicresoftflag = request.form['wicresoftflag']
+
         if bug_id is not None:
             # init stored procedure parmater  
             values = (build, class_name, test_name, bug_id)
             db_helper = DBHelper(values)
             db_helper.analyze_test_method_to_tfsbug()
+
         if queryflag:
-               return redirect(url_for('query', classname=class_name, testname=test_name))
+            return redirect(url_for('query', classname=class_name, testname=test_name))
+        elif wicresoftflag:
+            return redirect(url_for('wicresoft', build=build))
+
     return redirect(url_for('detail', build=build))
 
 

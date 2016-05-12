@@ -68,6 +68,53 @@ class DBHelper(object):
 
         return (feature, company)
 
+    def find_wicresoft_plate(self):
+        """
+        -- Display the Detailed Failure results for a given Build owner by wicresoft.
+        -- Parameter 1 Required varchar(50)- Build Number for a unit test run. 
+
+        exec dbo.FindFailuresPerBuild '6.3.3000.721'
+        """
+        unanalyzed_result = []
+        analyzed_result = []
+
+        build = self.values
+        if "6.3" in build:
+            branch = "DAX63SE"
+        else:
+            branch = "DAX62CD"
+        # init query string
+        sp_str = 'dbo.FindFailuresPerBuild  ?'
+        #call stored procedure
+        rows = self.execute_stored_procedure(sp_str)
+
+        # get all failurs owned by Wicresoft
+        for row in rows:
+            if row[5] == 'Failed':
+                area = self.get_area(row[1],row[2],branch)
+                if area[1] == "Wicresoft":
+                    if row[6]:
+                        analyzed_result.append({'ClassName':row[1],
+                                   'TestName':row[2],
+                                   'Type':row[3],
+                                   'Result':row[5],
+                                   'TFSBugID':row[6],
+                                   'ErrorMessage':row[7],
+                                   'Area':area
+                                   })
+                    else:
+                        unanalyzed_result.append({'ClassName':row[1],
+                                   'TestName':row[2],
+                                   'Type':row[3],
+                                   'Result':row[5],
+                                   'TFSBugID':row[6],
+                                   'ErrorMessage':row[7],
+                                   'Area':area
+                                   })
+         
+        return (unanalyzed_result, analyzed_result)
+
+
 
     def find_failures_per_build(self):
         '''
