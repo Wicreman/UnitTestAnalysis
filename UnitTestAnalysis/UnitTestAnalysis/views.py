@@ -91,9 +91,9 @@ def analyze():
             db_helper = DBHelper(values)
             db_helper.analyze_test_method_to_tfsbug()
 
-        if queryflag:
+        if queryflag == 'True':
             return redirect(url_for('query', classname=class_name, testname=test_name))
-        elif wicresoftflag:
+        elif wicresoftflag == 'True':
             return redirect(url_for('wicresoft', build=build))
 
     return redirect(url_for('detail', build=build))
@@ -158,7 +158,7 @@ def mark(build, classname, testname):
     db_helper = DBHelper((build, classname, testname))
     db_helper.mark_as_passed()
     
-    return redirect(url_for('detail', build=build))
+    return redirect(url_for('wicresoft', build=build))
 
 @app.route('/clearbug/<build>/<classname>/<testname>')
 def clearbug(build, classname, testname):
@@ -172,7 +172,7 @@ def clearbug(build, classname, testname):
     db_helper = DBHelper((build, classname, testname,None))
     db_helper.analyze_test_method_to_tfsbug()
     
-    return redirect(url_for('detail', build=build))
+    return redirect(url_for('wicresoft', build=build))
 
 @app.route('/newfailure', methods=['GET', 'POST'])
 def get_new_failure():
