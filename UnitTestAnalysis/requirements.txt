@@ -12,5 +12,5 @@ pyodbc==3.0.10
 simplegeneric==0.8.1
 SQLAlchemy==1.0.11
 traitlets==4.0.0
-Werkzeug==0.11.3
+Werkzeug==0.15.3
 wheel==0.26.0
